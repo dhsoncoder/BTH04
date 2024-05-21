@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     EditText edtmalop,edttenlop,edtsiso;
-    Button btninsert,btnupdate,btndelete,btnquery;
+    Button btninsert,btnupdate,btndelete;
     // Khai bao listview
     ListView lv;
     ArrayList<String> mylist;
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         Cursor c = mydatabase.query("tbllop",null,null,null,null,null,null);
         c.moveToNext();
         String data = "";
-        while(c.isAfterLast()==false){
+        while(!c.isAfterLast()){
             data = c.getString(0)+ " - "+ c.getString(1)+" - "+c.getString(2);
             c.moveToNext();
             mylist.add(data);
