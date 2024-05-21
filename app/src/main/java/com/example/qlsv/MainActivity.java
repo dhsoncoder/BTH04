@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         edttenlop = findViewById(R.id.edttenlop);
         btndelete = findViewById(R.id.btndelete);
         btninsert = findViewById(R.id.btninsert);
-        btnquery = findViewById(R.id.btnquery);
         btnupdate = findViewById(R.id.btnupdate);
         //Tao listview
 
