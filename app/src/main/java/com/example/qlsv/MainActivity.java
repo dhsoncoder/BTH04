@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> mylist;
     ArrayAdapter<String> myadapter;
     SQLiteDatabase mydatabase;
+    int MAX_SISO_VALUE  = 50;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,24 +59,50 @@ public class MainActivity extends AppCompatActivity {
         btninsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String malop = edtmalop.getText().toString();
-                String tenlop= edttenlop.getText().toString();
-                int siso= Integer.parseInt(edtsiso.getText().toString());
-                ContentValues myvalue = new ContentValues();
-                myvalue.put("malop",malop);
-                myvalue.put("tenlop",tenlop);
-                myvalue.put("siso",siso);
-                String msg="";
-                if(mydatabase.insert("tbllop",null,myvalue)==-1){
-                    msg="Lỗi ";
+                String malop = edtmalop.getText().toString().trim();
+                String tenlop = edttenlop.getText().toString().trim();
+                String sisoText = edtsiso.getText().toString().trim();
 
-                }else{
+                // Kiểm tra xem các trường input có rỗng không
+                if (malop.isEmpty() || tenlop.isEmpty() || sisoText.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Kiểm tra xem siso có phải là số nguyên dương không
+                int siso;
+                try {
+                    siso = Integer.parseInt(sisoText);
+                    if (siso <= 0) {
+                        Toast.makeText(MainActivity.this, "Số lượng học sinh phải là số nguyên dương", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(MainActivity.this, "Số lượng học sinh không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Kiểm tra xem siso có quá lớn không (điều kiện tùy thuộc vào yêu cầu của ứng dụng)
+                if (siso > MAX_SISO_VALUE) {
+                    Toast.makeText(MainActivity.this, "Số lượng học sinh quá lớn", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                ContentValues myvalue = new ContentValues();
+                myvalue.put("malop", malop);
+                myvalue.put("tenlop", tenlop);
+                myvalue.put("siso", siso);
+                String msg = "";
+                if (mydatabase.insert("tbllop", null, myvalue) == -1) {
+                    msg = "Lỗi ";
+                } else {
                     msg = "Thêm thành công";
                 }
-                Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                 reload();
             }
         });
+
         btndelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
